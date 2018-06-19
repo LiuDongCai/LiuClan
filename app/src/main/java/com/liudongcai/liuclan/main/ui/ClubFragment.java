@@ -21,7 +21,7 @@ import com.shizhefei.fragment.LazyFragment;
  *
  * @version V1.0
  */
-public class MoreFragment extends LazyFragment{
+public class ClubFragment extends LazyFragment{
 
     private ProgressBar progressBar;
     private TextView textView;
@@ -37,7 +37,7 @@ public class MoreFragment extends LazyFragment{
             }
         };
 
-        setContentView(R.layout.fragment_more);
+        setContentView(R.layout.fragment_club);
         tabIndex = getArguments().getInt("intent_int_index");
         progressBar = (ProgressBar) findViewById(R.id.fragment_mainTab_item_progressBar);
         textView = (TextView) findViewById(R.id.fragment_mainTab_item_textView);

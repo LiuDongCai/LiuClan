@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.liudongcai.liuclan.R;
+import com.liudongcai.liuclan.main.ui.ClubFragment;
+import com.liudongcai.liuclan.main.ui.HomeFragment;
 import com.liudongcai.liuclan.main.ui.MoreFragment;
+import com.liudongcai.liuclan.main.ui.NewsFragment;
 import com.liudongcai.liuclan.util.ViewUtil;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 
@@ -26,14 +29,14 @@ import com.shizhefei.view.indicator.IndicatorViewPager;
  *
  * @version V1.0
  */
-public class IndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter{
+public class MainIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter{
 
     private LayoutInflater inflate;
     private Context mContext;
 
-    private String[] names = {"首页", "论坛", "新闻", "更多"};
+    private String[] names = {"首页",  "新闻", "论坛", "更多"};
 
-    public IndicatorAdapter(Context context,FragmentManager fragmentManager) {
+    public MainIndicatorAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
         mContext=context;
         inflate = LayoutInflater.from(context);
@@ -58,9 +61,23 @@ public class IndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPagerA
 
     @Override
     public Fragment getFragmentForPage(int position) {
-        MoreFragment fragment = new MoreFragment();
+        Fragment fragment=null;
+        switch (position){
+            case 0:
+                fragment = new HomeFragment();
+                break;
+            case 1:
+                fragment = new NewsFragment();
+                break;
+            case 2:
+                fragment = new ClubFragment();
+                break;
+            case 3:
+                fragment = new MoreFragment();
+                break;
+        }
         Bundle bundle = new Bundle();
-        bundle.putInt(MoreFragment.INTENT_INT_INDEX, position);
+        bundle.putInt("intent_int_index", position);
         fragment.setArguments(bundle);
         return fragment;
     }

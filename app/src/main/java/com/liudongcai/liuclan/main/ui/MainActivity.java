@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.liudongcai.liuclan.R;
-import com.liudongcai.liuclan.main.adapter.IndicatorAdapter;
+import com.liudongcai.liuclan.main.adapter.MainIndicatorAdapter;
 import com.shizhefei.view.indicator.FixedIndicatorView;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
@@ -22,6 +22,17 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 项目名称：LiuClan<br>
+ * 类描述：主页<br>
+ * 创建人：刘栋财<br>
+ * 创建时间：2018/6/13 16:30<br>
+ * 修改人： <br>
+ * 修改时间： <br>
+ * 修改备注：
+ *
+ * @version V1.0
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,19 +73,19 @@ public class MainActivity extends AppCompatActivity
     private void setIndicatorView() {
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_viewPager);
 
-        fixedIndicatorView.setScrollBar(new ColorBar(getApplicationContext(), Color.RED, 5));
+        fixedIndicatorView.setScrollBar(new ColorBar(getApplicationContext(), getResources().getColor(R.color.colorPrimary), 5));
         float unSelectSize =15;
         float selectSize = unSelectSize * 1.2f;
         // 设置滚动监听
         fixedIndicatorView.setOnTransitionListener(new OnTransitionTextListener().
-                setColor(Color.RED, Color.BLACK).setSize(selectSize, unSelectSize));
+                setColor(getResources().getColor(R.color.colorPrimary), Color.BLACK).setSize(selectSize, unSelectSize));
 
         // 设置viewpager保留界面不重新加载的页面数量
         viewPager.setOffscreenPageLimit(4);
         // 将viewPager和indicator使用
         indicatorViewPager = new IndicatorViewPager(fixedIndicatorView, viewPager);
         // 设置indicatorViewPager的适配器
-        indicatorViewPager.setAdapter(new IndicatorAdapter(mContext,getSupportFragmentManager()));
+        indicatorViewPager.setAdapter(new MainIndicatorAdapter(mContext,getSupportFragmentManager()));
     }
 
     @Override
