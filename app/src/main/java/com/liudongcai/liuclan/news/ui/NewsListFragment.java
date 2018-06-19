@@ -1,4 +1,4 @@
-package com.liudongcai.liuclan.main.ui;
+package com.liudongcai.liuclan.news.ui;
 
 import android.os.Bundle;
 import android.os.Handler;

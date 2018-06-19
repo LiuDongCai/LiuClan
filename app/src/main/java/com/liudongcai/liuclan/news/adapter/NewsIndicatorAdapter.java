@@ -1,17 +1,18 @@
-package com.liudongcai.liuclan.main.adapter;
+package com.liudongcai.liuclan.news.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.liudongcai.liuclan.R;
-import com.liudongcai.liuclan.main.ui.NewsListFragment;
+import com.liudongcai.liuclan.news.ui.NewsListFragment;
 import com.liudongcai.liuclan.util.ViewUtil;
 import com.shizhefei.view.indicator.IndicatorViewPager;
 
@@ -31,7 +32,7 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
     private LayoutInflater inflate;
     private Context mContext;
 
-    private String[] names = {"精选",  "世界杯", "军事", "娱乐"};
+    private String[] names = {"精选",  "世界杯", "军事", "娱乐", "娱乐", "娱乐", "娱乐", "娱乐", "娱乐"};
 
     public NewsIndicatorAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -41,7 +42,7 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
 
     @Override
     public int getCount() {
-        return 4;
+        return names.length;
     }
 
     @Override
@@ -51,6 +52,7 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
         }
         TextView textView = (TextView) convertView;
         textView.setText(names[position % names.length]);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX ,mContext.getResources().getDimension(R.dimen.margin_size12dp));
         int padding = ViewUtil.dipToPix(mContext,10);
         textView.setPadding(padding, 0, padding, 0);
         return convertView;

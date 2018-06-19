@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.shizhefei.view.indicator.FixedIndicatorView
+    <com.shizhefei.view.indicator.ScrollIndicatorView
         android:id="@+id/fiv_news"
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="@dimen/margin_size40dp"
+        android:fillViewport="false"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_news"

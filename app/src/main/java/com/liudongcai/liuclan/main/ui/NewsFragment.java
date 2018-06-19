@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import com.liudongcai.liuclan.R;
-import com.liudongcai.liuclan.main.adapter.NewsIndicatorAdapter;
+import com.liudongcai.liuclan.news.adapter.NewsIndicatorAdapter;
 import com.shizhefei.fragment.LazyFragment;
-import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.IndicatorViewPager;
+import com.shizhefei.view.indicator.ScrollIndicatorView;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 
@@ -36,20 +36,22 @@ public class NewsFragment extends LazyFragment{
         mContext=getApplicationContext();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.vp_news);
-        Indicator indicator = (Indicator) findViewById(R.id.fiv_news);
+        ScrollIndicatorView scrollIndicatorView = (ScrollIndicatorView) findViewById(R.id.fiv_news);
 
-        indicator.setScrollBar(new ColorBar(getApplicationContext(), getResources().getColor(R.color.colorPrimary), 5));
+        scrollIndicatorView.setScrollBar(new ColorBar(getApplicationContext(), getResources().getColor(R.color.colorPrimary), 5));
 
         float unSelectSize =15;
         float selectSize = unSelectSize * 1.2f;
         // 设置滚动监听
-        indicator.setOnTransitionListener(new OnTransitionTextListener().
+        scrollIndicatorView.setOnTransitionListener(new OnTransitionTextListener().
                 setColor(getResources().getColor(R.color.colorPrimary), Color.BLACK).setSize(selectSize, unSelectSize));
 
-        // 设置viewpager保留界面不重新加载的页面数量
-        viewPager.setOffscreenPageLimit(4);
+//        // 设置viewpager保留界面不重新加载的页面数量
+//        viewPager.setOffscreenPageLimit(4);
+        // 设置是否自动布局
+        scrollIndicatorView.setSplitAuto(true);
         // 将viewPager和indicator使用
-        indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
+        indicatorViewPager = new IndicatorViewPager(scrollIndicatorView, viewPager);
         // 设置indicatorViewPager的适配器
         indicatorViewPager.setAdapter(new NewsIndicatorAdapter(mContext,getChildFragmentManager()));
 
