@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/margin_size80dp"
+    android:layout_height="@dimen/margin_size93dp"
     android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/margin_size80dp" />
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_size5dp"
+        android:foreground="?android:attr/selectableItemBackground">
 
-    <ImageView
-        android:id="@+id/iv_photo"
-        android:layout_width="@dimen/margin_size130dp"
-        android:layout_height="@dimen/margin_size80dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_size82dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_photo"
+                android:layout_width="@dimen/margin_size133dp"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_size4dp"
+                android:scaleType="centerCrop"
+                android:background="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_size4dp"
+                android:textSize="@dimen/margin_size13dp"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

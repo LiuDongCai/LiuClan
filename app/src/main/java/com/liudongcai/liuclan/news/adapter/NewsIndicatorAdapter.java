@@ -32,7 +32,7 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
     private LayoutInflater inflate;
     private Context mContext;
 
-    private String[] names = {"精选",  "世界杯", "军事", "娱乐", "娱乐", "娱乐", "娱乐", "娱乐", "娱乐"};
+    private String[] names = {"精选",  "世界杯", "军事", "娱乐", "美图", "社会", "游戏", "动漫", "美女"};
 
     public NewsIndicatorAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);

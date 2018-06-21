@@ -41,3 +41,29 @@
 -keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(...);
 }
+
+#okgo
+-dontwarn com.lzy.okgo.**
+-keep class com.lzy.okgo.**{*;}
+
+#okrx
+-dontwarn com.lzy.okrx.**
+-keep class com.lzy.okrx.**{*;}
+
+#okrx2
+-dontwarn com.lzy.okrx2.**
+-keep class com.lzy.okrx2.**{*;}
+
+#okserver
+-dontwarn com.lzy.okserver.**
+-keep class com.lzy.okserver.**{*;}
+
+#BaseQuickAdapter
+-keep class com.chad.library.adapter.** {
+*;
+}
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
+     <init>(...);
+}

@@ -47,7 +47,7 @@ public class NewsFragment extends LazyFragment{
                 setColor(getResources().getColor(R.color.colorPrimary), Color.BLACK).setSize(selectSize, unSelectSize));
 
 //        // 设置viewpager保留界面不重新加载的页面数量
-//        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(9);
         // 设置是否自动布局
         scrollIndicatorView.setSplitAuto(true);
         // 将viewPager和indicator使用

@@ -30,10 +30,9 @@ public class NewsListAdapter extends BaseQuickAdapter<NewsBean, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder helper, NewsBean item) {
         helper.setText(R.id.tv_title, item.getTitle());
-//        helper.setImageResource(R.id.icon, item.getImageResource());
-//        // 加载网络图片
+        // 加载网络图片
         Glide.with(mContext)
-                .load(item.getPhoto())
+                .load("http://"+item.getPhoto())
                 .into((ImageView) helper.getView(R.id.iv_photo));
     }
 
