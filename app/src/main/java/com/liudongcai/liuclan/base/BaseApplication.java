@@ -18,6 +18,20 @@ public class BaseApplication  extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+
+        init();
+
+    }
+
+    /**
+     * 创建人：刘栋财<br>
+     * 创建时间：2018/6/21 10:48<br>
+     * 方法描述：初始化<br>
+     */
+    private void init() {
+
+
+
     }
 
 }

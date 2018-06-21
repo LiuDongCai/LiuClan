@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -16,6 +19,7 @@ import com.liudongcai.liuclan.config.Urls;
 import com.liudongcai.liuclan.news.adapter.NewsListAdapter;
 import com.liudongcai.liuclan.news.bean.NewsBean;
 import com.liudongcai.liuclan.util.JsonAnalyze;
+import com.liudongcai.liuclan.util.NetworkUtil;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -26,6 +30,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * 项目名称：LiuClan<br>
@@ -45,6 +51,10 @@ public class NewsListFragment extends LazyFragment{
     private NewsListAdapter listAdapter;
     private RecyclerView rv_news;
     private SwipeRefreshLayout srl_refresh;
+    private ProgressBar pb_news;
+    private View emptyView;
+    private ImageView iv_empty;
+    private TextView tv_empty;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -70,6 +80,8 @@ public class NewsListFragment extends LazyFragment{
     private void initView(){
         rv_news= (RecyclerView) findViewById(R.id.rv_news);
         srl_refresh= (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        pb_news= (ProgressBar) findViewById(R.id.pb_news);
+
 
         List<NewsBean> list = new ArrayList<>();
         listAdapter=new NewsListAdapter(R.layout.item_news_list,list);
@@ -78,11 +90,14 @@ public class NewsListFragment extends LazyFragment{
         rv_news.setAdapter(listAdapter);
 
         // 没有数据的时候默认显示该布局
-        View emptyView=((LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
+        emptyView=((LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
                 inflate(R.layout.empty_news, null, false);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        tv_empty= (TextView) emptyView.findViewById(R.id.tv_empty);
+        iv_empty= (ImageView) emptyView.findViewById(R.id.iv_empty);
         listAdapter.setEmptyView(emptyView);
+        emptyView.setVisibility(View.GONE);
 
 
         //Item的点击事件
@@ -150,6 +165,16 @@ public class NewsListFragment extends LazyFragment{
      * 方法描述：请求数据<br>
      */
     private void getData(final boolean isRefresh){
+        if(!NetworkUtil.isNetworkConnected(mContext)){
+            //无网络连接
+            Toasty.normal(mContext, "网络连接失败，请检查网络后重试").show();
+            pb_news.setVisibility(View.GONE);
+            srl_refresh.setRefreshing(false);
+            emptyView.setVisibility(View.VISIBLE);
+            iv_empty.setBackgroundResource(R.mipmap.bg_nonetwork);
+            tv_empty.setText(R.string.no_network);
+            return;
+        }
         System.out.println("结果："+Urls.IFENG_NEWS+System.currentTimeMillis());
         OkGo.<String>get(Urls.IFENG_NEWS+System.currentTimeMillis())
                 .tag(this)
@@ -161,6 +186,7 @@ public class NewsListFragment extends LazyFragment{
                             // 加载完数据设置为不刷新状态，将下拉进度收起来
                             srl_refresh.setRefreshing(false);
                         }
+                        pb_news.setVisibility(View.GONE);
                         //注意这里已经是在主线程了
                         String data = response.body();//这个就是返回来的结果
                         //破解防抓取
@@ -178,13 +204,33 @@ public class NewsListFragment extends LazyFragment{
                                     list.add(newsBean);
                                     listAdapter.addData(newsBean);
                                 }
+                            }else{
+                                Toasty.normal(mContext, "暂无新闻").show();
+                                pb_news.setVisibility(View.GONE);
+                                srl_refresh.setRefreshing(false);
+                                emptyView.setVisibility(View.VISIBLE);
+                                iv_empty.setBackgroundResource(R.mipmap.bg_empty);
+                                tv_empty.setText(R.string.no_news);
                             }
-                        }catch (Exception e){}
+                        }catch (Exception e){
+                            Toasty.normal(mContext, "暂无新闻").show();
+                            pb_news.setVisibility(View.GONE);
+                            srl_refresh.setRefreshing(false);
+                            emptyView.setVisibility(View.VISIBLE);
+                            iv_empty.setBackgroundResource(R.mipmap.bg_empty);
+                            tv_empty.setText(R.string.no_news);
+                        }
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
+                        Toasty.normal(mContext, "请求失败，请稍后重试").show();
+                        pb_news.setVisibility(View.GONE);
+                        srl_refresh.setRefreshing(false);
+                        emptyView.setVisibility(View.VISIBLE);
+                        iv_empty.setBackgroundResource(R.mipmap.bg_failed);
+                        tv_empty.setText(R.string.request_fail);
                     }
                 });
     }

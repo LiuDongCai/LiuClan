@@ -7,27 +7,28 @@
 
 
         <LinearLayout
-            android:layout_width="@dimen/margin_size75dp"
+            android:layout_width="@dimen/margin_size65dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/iv_photo"
-                android:layout_width="@dimen/margin_size75dp"
-                android:layout_height="@dimen/margin_size75dp"
+                android:id="@+id/iv_empty"
+                android:layout_width="@dimen/margin_size65dp"
+                android:layout_height="@dimen/margin_size65dp"
                 android:padding="@dimen/margin_size4dp"
                 android:scaleType="fitXY"
                 android:background="@mipmap/bg_empty"/>
 
             <TextView
-                android:id="@+id/tv_title"
+                android:id="@+id/tv_empty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_size4dp"
                 android:textSize="@dimen/margin_size13dp"
                 android:gravity="center_horizontal"
-                android:textColor="@color/cardview_dark_background"
+                android:textColor="@color/empty_gray"
+                android:layout_marginTop="@dimen/margin_size9dp"
                 android:text="暂无新闻"
                 android:textStyle="bold" />
 
