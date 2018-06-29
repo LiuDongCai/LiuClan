@@ -9,6 +9,8 @@
 
     <string name="no_network">暂无网络</string>
     <string name="request_fail">请求失败</string>
+    <string name="request_failed">请求失败,请稍后重试</string>
+    <string name="request_nonet">网络连接失败,请稍后重试</string>
     <string name="no_news">暂无新闻</string>
 
 </resources>

@@ -13,8 +13,10 @@ package com.liudongcai.liuclan.config;
  */
 public class Urls {
 
+    //凤凰新闻-baseurl
+    public static final String IFENG_BASE_NEWS = "http://inews.ifeng.com/";
     //凤凰新闻  后接时间戳
-    public static final String IFENG_NEWS = "http://inews.ifeng.com/32_0/data.shtml?_=";
+    public static final String IFENG_END_NEWS = "/data.shtml?_=";
 
 
 }

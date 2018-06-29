@@ -46,9 +46,11 @@ import es.dmoral.toasty.Toasty;
  */
 public class NewsListFragment extends LazyFragment{
 
-    private int tabIndex;
+    private String namesIndex;
     private Context mContext;
     private NewsListAdapter listAdapter;
+    private int pageIndex=0;
+
     private RecyclerView rv_news;
     private SwipeRefreshLayout srl_refresh;
     private ProgressBar pb_news;
@@ -62,13 +64,13 @@ public class NewsListFragment extends LazyFragment{
 
         setContentView(R.layout.fragment_news_list);
         mContext=getApplicationContext();
-        tabIndex = getArguments().getInt("intent_int_index");
+        namesIndex = getArguments().getString("namesIndex");
 
         //初始试图
         initView();
 
         //请求数据
-        getData(false);
+        getData(true);
 
     }
 
@@ -117,28 +119,8 @@ public class NewsListFragment extends LazyFragment{
         listAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                rv_news.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-//                        if (mCurrentCounter >= TOTAL_COUNTER) {
-//                            //数据全部加载完毕
-//                            mQuickAdapter.loadMoreEnd();
-//                        } else {
-//                            if (isErr) {
-//                                //成功获取更多数据
-//                                mQuickAdapter.addData(DataServer.getSampleData(PAGE_SIZE));
-//                                mCurrentCounter = mQuickAdapter.getData().size();
-//                                mQuickAdapter.loadMoreComplete();
-//                            } else {
-//                                //获取更多数据失败
-//                                isErr = true;
-//                                Toast.makeText(PullToRefreshUseActivity.this, R.string.network_err, Toast.LENGTH_LONG).show();
-//                                mQuickAdapter.loadMoreFail();
-//
-//                            }
-//                        }
-                    }
-                }, 1000);
+                pageIndex++;
+                getData(false);
             }
         }, rv_news);
 
@@ -152,7 +134,8 @@ public class NewsListFragment extends LazyFragment{
             public void onRefresh() {
                 // 开始刷新，设置当前为刷新状态
                 srl_refresh.setRefreshing(true);
-                //请求数据
+                //刷新数据
+                pageIndex=0;
                 getData(true);
             }
         });
@@ -167,7 +150,7 @@ public class NewsListFragment extends LazyFragment{
     private void getData(final boolean isRefresh){
         if(!NetworkUtil.isNetworkConnected(mContext)){
             //无网络连接
-            Toasty.normal(mContext, "网络连接失败，请检查网络后重试").show();
+            Toasty.normal(mContext, getResources().getString(R.string.request_nonet)).show();
             pb_news.setVisibility(View.GONE);
             srl_refresh.setRefreshing(false);
             emptyView.setVisibility(View.VISIBLE);
@@ -175,16 +158,18 @@ public class NewsListFragment extends LazyFragment{
             tv_empty.setText(R.string.no_network);
             return;
         }
-        System.out.println("结果："+Urls.IFENG_NEWS+System.currentTimeMillis());
-        OkGo.<String>get(Urls.IFENG_NEWS+System.currentTimeMillis())
+        String url=Urls.IFENG_BASE_NEWS+namesIndex+"_"+pageIndex+Urls.IFENG_END_NEWS+System.currentTimeMillis();
+        System.out.println("结果："+url);
+        OkGo.<String>get(url)
                 .tag(this)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         if(isRefresh){
-                            listAdapter.getData().clear();
                             // 加载完数据设置为不刷新状态，将下拉进度收起来
                             srl_refresh.setRefreshing(false);
+                        }else{
+                            listAdapter.loadMoreComplete();
                         }
                         pb_news.setVisibility(View.GONE);
                         //注意这里已经是在主线程了
@@ -204,33 +189,48 @@ public class NewsListFragment extends LazyFragment{
                                     list.add(newsBean);
                                     listAdapter.addData(newsBean);
                                 }
+                                if(isRefresh){//下拉刷新，设置新数据
+                                    listAdapter.setNewData(list);
+                                }
                             }else{
-                                Toasty.normal(mContext, "暂无新闻").show();
+                                if(isRefresh){
+                                    Toasty.normal(mContext, getResources().getString(R.string.no_news)).show();
+                                    pb_news.setVisibility(View.GONE);
+                                    srl_refresh.setRefreshing(false);
+                                    emptyView.setVisibility(View.VISIBLE);
+                                    iv_empty.setBackgroundResource(R.mipmap.bg_empty);
+                                    tv_empty.setText(R.string.no_news);
+                                }else{//没数据、加载完成
+                                    listAdapter.loadMoreEnd();
+                                }
+                            }
+                        }catch (Exception e){
+                            if(isRefresh){
+                                Toasty.normal(mContext, getResources().getString(R.string.no_news)).show();
                                 pb_news.setVisibility(View.GONE);
                                 srl_refresh.setRefreshing(false);
                                 emptyView.setVisibility(View.VISIBLE);
                                 iv_empty.setBackgroundResource(R.mipmap.bg_empty);
                                 tv_empty.setText(R.string.no_news);
+                            }else{
+                                listAdapter.loadMoreEnd();
                             }
-                        }catch (Exception e){
-                            Toasty.normal(mContext, "暂无新闻").show();
-                            pb_news.setVisibility(View.GONE);
-                            srl_refresh.setRefreshing(false);
-                            emptyView.setVisibility(View.VISIBLE);
-                            iv_empty.setBackgroundResource(R.mipmap.bg_empty);
-                            tv_empty.setText(R.string.no_news);
                         }
                     }
 
                     @Override
                     public void onError(Response<String> response) {
                         super.onError(response);
-                        Toasty.normal(mContext, "请求失败，请稍后重试").show();
+                        //加载失败
+                        Toasty.normal(mContext, getResources().getString(R.string.request_failed)).show();
                         pb_news.setVisibility(View.GONE);
                         srl_refresh.setRefreshing(false);
                         emptyView.setVisibility(View.VISIBLE);
                         iv_empty.setBackgroundResource(R.mipmap.bg_failed);
                         tv_empty.setText(R.string.request_fail);
+                        if(!isRefresh){
+                            listAdapter.loadMoreFail();
+                        }
                     }
                 });
     }

@@ -32,7 +32,8 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
     private LayoutInflater inflate;
     private Context mContext;
 
-    private String[] names = {"精选",  "世界杯", "军事", "娱乐", "美图", "社会", "游戏", "动漫", "美女"};
+    private String[] names = {"精选",  "军事", "历史", "NBA", "体育", "社会"};
+    private String[] namesIndex = {"32",  "39", "21", "34", "38", "31"};
 
     public NewsIndicatorAdapter(Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -62,7 +63,7 @@ public class NewsIndicatorAdapter extends IndicatorViewPager.IndicatorFragmentPa
     public Fragment getFragmentForPage(int position) {
         Fragment fragment=new NewsListFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("intent_int_index", position);
+        bundle.putString("namesIndex", namesIndex[position]);
         fragment.setArguments(bundle);
         return fragment;
     }
