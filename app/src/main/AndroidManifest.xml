@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.liudongcai.liuclan">
 
-    <!--网络请求-->
+    <!-- 网络请求 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许程序访问有关GSM网络信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--首页-->
+        <!-- 首页 -->
         <activity
             android:name=".main.ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,6 +28,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 新闻详情页 -->
+        <activity
+            android:name=".news.ui.NewsHtmlActivity"
+            />
 
     </application>
 

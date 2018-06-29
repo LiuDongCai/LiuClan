@@ -8,11 +8,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.liudongcai.liuclan.R;
+import com.liudongcai.liuclan.base.BaseActivity;
 import com.liudongcai.liuclan.main.adapter.MainIndicatorAdapter;
 import com.shizhefei.view.indicator.FixedIndicatorView;
 import com.shizhefei.view.indicator.IndicatorViewPager;
@@ -21,6 +22,7 @@ import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 /**
  * 项目名称：LiuClan<br>
@@ -33,7 +35,7 @@ import butterknife.ButterKnife;
  *
  * @version V1.0
  */
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.siv_indicator)
@@ -122,4 +124,25 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    //--------------双击退出app--------------
+
+    //记录用户首次点击返回键的时间
+    private long firstTime=0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK && event.getAction()==KeyEvent.ACTION_DOWN){
+            if (System.currentTimeMillis()-firstTime>2000){
+                Toasty.normal(mContext, getResources().getString(R.string.exit_again)).show();
+                firstTime=System.currentTimeMillis();
+            }else{
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
