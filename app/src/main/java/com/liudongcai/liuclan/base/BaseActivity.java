@@ -10,4 +10,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+//        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+    }
 }

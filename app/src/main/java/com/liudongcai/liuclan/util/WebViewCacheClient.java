@@ -2,9 +2,7 @@ package com.liudongcai.liuclan.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -107,14 +105,8 @@ public class WebViewCacheClient extends WebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        if (url.startsWith("tel:")){
-            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-            mContext.startActivity(intent);
-            return true;
-        }  else {
-            view.loadUrl(url); // 使用当前WebView处理跳转
-            return true; // true表示此事件在此处被处理，不需要再广播
-        }
+        view.loadUrl(url); // 使用当前WebView处理跳转
+        return true; // true表示此事件在此处被处理，不需要再广播
     }
 
 

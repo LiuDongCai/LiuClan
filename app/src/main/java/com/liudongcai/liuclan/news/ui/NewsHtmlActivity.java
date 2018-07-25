@@ -3,7 +3,6 @@ package com.liudongcai.liuclan.news.ui;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -11,6 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.liudongcai.liuclan.R;
+import com.liudongcai.liuclan.base.BaseActivity;
 import com.liudongcai.liuclan.util.ACache;
 import com.liudongcai.liuclan.util.NetworkUtil;
 import com.liudongcai.liuclan.util.WebViewCacheClient;
@@ -30,7 +30,7 @@ import ren.yale.android.cachewebviewlib.CacheWebView;
  *
  * @version V1.0
  */
-public class NewsHtmlActivity extends AppCompatActivity {
+public class NewsHtmlActivity extends BaseActivity {
 
 
     @BindView(R.id.webView)

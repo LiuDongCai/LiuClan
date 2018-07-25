@@ -91,7 +91,7 @@ public class NewsListFragment extends LazyFragment{
         rv_news.setLayoutManager(layoutmanager);//设置RecyclerView 布局
         rv_news.setAdapter(listAdapter);
 
-        // 没有数据的时候默认显示该布局
+
         emptyView=((LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
                 inflate(R.layout.empty_news, null, false);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
