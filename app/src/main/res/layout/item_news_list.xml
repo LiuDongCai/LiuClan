@@ -21,8 +21,7 @@
                 android:layout_width="@dimen/margin_size133dp"
                 android:layout_height="match_parent"
                 android:padding="@dimen/margin_size4dp"
-                android:scaleType="centerCrop"
-                android:background="@mipmap/ic_launcher"/>
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/tv_title"

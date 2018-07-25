@@ -10,10 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.liudongcai.liuclan.R;
 import com.liudongcai.liuclan.config.Urls;
 import com.liudongcai.liuclan.news.adapter.NewsListAdapter;
@@ -53,10 +54,11 @@ public class NewsListFragment extends LazyFragment{
 
     private RecyclerView rv_news;
     private SwipeRefreshLayout srl_refresh;
-    private ProgressBar pb_news;
     private View emptyView;
     private ImageView iv_empty;
     private TextView tv_empty;
+
+    private SkeletonScreen skeletonScreen;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -82,8 +84,6 @@ public class NewsListFragment extends LazyFragment{
     private void initView(){
         rv_news= (RecyclerView) findViewById(R.id.rv_news);
         srl_refresh= (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
-        pb_news= (ProgressBar) findViewById(R.id.pb_news);
-
 
         List<NewsBean> list = new ArrayList<>();
         listAdapter=new NewsListAdapter(R.layout.item_news_list,list);
@@ -91,6 +91,11 @@ public class NewsListFragment extends LazyFragment{
         rv_news.setLayoutManager(layoutmanager);//设置RecyclerView 布局
         rv_news.setAdapter(listAdapter);
 
+        //骨架視圖
+        skeletonScreen=Skeleton.bind(rv_news)
+                .adapter(listAdapter)
+                .load(R.layout.item_skeleton_news)
+                .show();
 
         emptyView=((LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
                 inflate(R.layout.empty_news, null, false);
@@ -155,7 +160,6 @@ public class NewsListFragment extends LazyFragment{
         if(!NetworkUtil.isNetworkConnected(mContext)){
             //无网络连接
             Toasty.normal(mContext, getResources().getString(R.string.request_nonet)).show();
-            pb_news.setVisibility(View.GONE);
             srl_refresh.setRefreshing(false);
             emptyView.setVisibility(View.VISIBLE);
             iv_empty.setBackgroundResource(R.mipmap.bg_nonetwork);
@@ -172,12 +176,13 @@ public class NewsListFragment extends LazyFragment{
                         if(isRefresh){
                             // 加载完数据设置为不刷新状态，将下拉进度收起来
                             srl_refresh.setRefreshing(false);
+                            skeletonScreen.hide();
                         }else{
                             listAdapter.loadMoreComplete();
                         }
-                        pb_news.setVisibility(View.GONE);
                         //注意这里已经是在主线程了
                         String data = response.body();//这个就是返回来的结果
+
                         //破解防抓取
                         data=data.replace("getListDatacallback(","").replace(");","");
                         try{
@@ -199,7 +204,6 @@ public class NewsListFragment extends LazyFragment{
                             }else{
                                 if(isRefresh){
                                     Toasty.normal(mContext, getResources().getString(R.string.no_news)).show();
-                                    pb_news.setVisibility(View.GONE);
                                     srl_refresh.setRefreshing(false);
                                     emptyView.setVisibility(View.VISIBLE);
                                     iv_empty.setBackgroundResource(R.mipmap.bg_empty);
@@ -209,9 +213,9 @@ public class NewsListFragment extends LazyFragment{
                                 }
                             }
                         }catch (Exception e){
+                            System.out.println("结果："+e);
                             if(isRefresh){
                                 Toasty.normal(mContext, getResources().getString(R.string.no_news)).show();
-                                pb_news.setVisibility(View.GONE);
                                 srl_refresh.setRefreshing(false);
                                 emptyView.setVisibility(View.VISIBLE);
                                 iv_empty.setBackgroundResource(R.mipmap.bg_empty);
@@ -227,7 +231,6 @@ public class NewsListFragment extends LazyFragment{
                         super.onError(response);
                         //加载失败
                         Toasty.normal(mContext, getResources().getString(R.string.request_failed)).show();
-                        pb_news.setVisibility(View.GONE);
                         srl_refresh.setRefreshing(false);
                         emptyView.setVisibility(View.VISIBLE);
                         iv_empty.setBackgroundResource(R.mipmap.bg_failed);
